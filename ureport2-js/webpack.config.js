@@ -2,17 +2,17 @@
  * Created by Jacky.Gao on 2018-04-15.
  * Base on Webpack4
  */
-const path=require('path');
-module.exports={
-    mode:'development',
+const path = require('path');
+module.exports = {
+    mode: 'development',
     entry: {
-        designer:'./src/index.js',
-        searchform:'./src/form/index.js',
-        preview:'./src/preview.js'
+        designer: './src/index.js',
+        searchform: './src/form/index.js',
+        preview: './src/preview.js'
     },
-    output:{
-        path:path.resolve('../ureport2-console/src/main/resources/ureport-asserts/js'),
-        filename:'[name].bundle.js'
+    output: {
+        path: path.resolve('../ureport2-console/src/main/resources/ureport-asserts/js'),
+        filename: '[name].bundle.js'
     },
     optimization: {
         splitChunks: {
@@ -27,16 +27,22 @@ module.exports={
             }
         }
     },
-    module:{
-        rules:[
+    module: {
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                use: [{
+                    loader: "babel-loader",
+                    options: {
+                        presets: ['es2015']
+                    }
+                }]
+
             },
             {
-                test:/\.css$/,
-                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+                test: /\.css$/,
+                use: [{loader: 'style-loader'}, {loader: 'css-loader'}]
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
