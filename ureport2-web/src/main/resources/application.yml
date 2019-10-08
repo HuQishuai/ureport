@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@10.110.2.87:1521:scossora
+    username: SD_DZTZ
+    password: SD_DZTZ
+    driver-class-name: oracle.jdbc.driver.OracleDriver
