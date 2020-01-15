@@ -6,9 +6,9 @@ const path = require('path');
 module.exports = {
     mode: 'development',
     entry: {
-        designer: './src/index.js',
-        searchform: './src/form/index.js',
-        preview: './src/preview.js'
+        designer: ['babel-polyfill','./src/index.js'],
+        searchform: ['babel-polyfill','./src/form/index.js'],
+        preview: ['babel-polyfill','./src/preview.js']
     },
     output: {
         path: path.resolve('../ureport2-console/src/main/resources/ureport-asserts/js'),
