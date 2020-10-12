@@ -124,9 +124,13 @@ public class HtmlProducer{
 			if(height<1){
 				continue;
 			}
-			// 添加thead标签，用于表头固定
+
 			if(hasHead>-1&&i==0){
+				// 添加thead标签，用于表头固定
 				sb.append("<thead >");
+			}else if(hasHead==-1&&i==0){
+				// 没有表头，则不添加thead标签
+				sb.append("<tbody >");
 			}
 			sb.append("<tr style=\"height:"+height+"pt\">");
 			for(int j=0;j<colSize;j++){
@@ -148,15 +152,15 @@ public class HtmlProducer{
 				}
 				if(rowSpan>0){
 					if(colSpan>0){
-						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\" colspan=\""+colSpan+"\"");
+						sb.append("<t"+ (hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\" colspan=\""+colSpan+"\"");
 					}else{
-						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\"");
+						sb.append("<t"+ (hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\"");
 					}
 				}else{
 					if(colSpan>0){
-						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d")+" colspan=\""+colSpan+"\"");
+						sb.append("<t"+ (hasHead>=i? "h":"d")+" colspan=\""+colSpan+"\"");
 					}else{
-						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d"));
+						sb.append("<t"+ (hasHead>=i? "h":"d"));
 					}
 				}
 				sb.append(" class='_"+cell.getName()+"' ");
@@ -252,13 +256,12 @@ public class HtmlProducer{
 				if(hasLink){
 					sb.append("</a>");
 				}
-				sb.append("</t"+ (hasHead>0 && hasHead>=i? "h":"d")+">");
+				sb.append("</t"+ (hasHead>=i? "h":"d")+">");
 			}
 			sb.append("</tr>");
 			if(hasHead==i){
-				sb.append("</thead>");
+				sb.append("</thead><tbody >");
 			}
-			sb.append("<tbody >");
 		}
 		sb.append("</tbody></table>");
 		return sb;
