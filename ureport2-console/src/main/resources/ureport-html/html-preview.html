@@ -11,6 +11,18 @@
 <style type="text/css" id="_ureport_table_style">
 	${style}
 </style>
+<!--设置表格高度，并呈现y轴滚动条-->
+<style type="text/css">
+	html,body{
+		height: 98%;
+	}
+	#_ureport_table {
+		/**make table can scroll**/
+		height: 88%;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+</style>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/jquery.min.js"></script>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap.min.js"></script>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/Chart.bundle.min.js"></script>
@@ -122,6 +134,13 @@ $(document).ready(function(){
 	function doSearch(){
 		submitSearchForm("${file}","${customParameters}");
 	}
+	// 表头固定滚动
+	var ureportTable = document.querySelector('#_ureport_table');
+	function scrollHandle (e){
+		var scrollTop = this.scrollTop;
+		this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
+	}
+	ureportTable.addEventListener('scroll',scrollHandle);
 });
 </script>
 </body>

@@ -18,6 +18,7 @@ package com.bstek.ureport.export.html;
 import java.util.List;
 import java.util.Map;
 
+import com.bstek.ureport.definition.Band;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -106,6 +107,14 @@ public class HtmlProducer{
 		}
 		int colSize=columns.size();
 		int rowSize=rows.size();
+		// 判断是否有标题或表头
+		int hasHead=-1;
+		for(int i=0;i<rowSize;i++){
+			Row row=rows.get(i);
+			if(null!=row.getBand()&&(row.getBand().equals(Band.title)||row.getBand().equals(Band.headerrepeat))){
+				hasHead=i;
+			}
+		}
 		for(int i=0;i<rowSize;i++){
 			Row row=rows.get(i);
 			if(!forPage && row.isForPaging()){
@@ -114,6 +123,10 @@ public class HtmlProducer{
 			int height=row.getRealHeight();
 			if(height<1){
 				continue;
+			}
+			// 添加thead标签，用于表头固定
+			if(hasHead>-1&&i==0){
+				sb.append("<thead >");
 			}
 			sb.append("<tr style=\"height:"+height+"pt\">");
 			for(int j=0;j<colSize;j++){
@@ -135,15 +148,15 @@ public class HtmlProducer{
 				}
 				if(rowSpan>0){
 					if(colSpan>0){
-						sb.append("<td rowspan=\""+rowSpan+"\" colspan=\""+colSpan+"\"");						
+						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\" colspan=\""+colSpan+"\"");
 					}else{
-						sb.append("<td rowspan=\""+rowSpan+"\"");						
+						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\"");
 					}
 				}else{
 					if(colSpan>0){
-						sb.append("<td colspan=\""+colSpan+"\"");						
+						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d")+" colspan=\""+colSpan+"\"");
 					}else{
-						sb.append("<td");
+						sb.append("<t"+ (hasHead>0 && hasHead>=i? "h":"d"));
 					}
 				}
 				sb.append(" class='_"+cell.getName()+"' ");
@@ -239,11 +252,15 @@ public class HtmlProducer{
 				if(hasLink){
 					sb.append("</a>");
 				}
-				sb.append("</td>");
+				sb.append("</t"+ (hasHead>0 && hasHead>=i? "h":"d")+">");
 			}
 			sb.append("</tr>");
+			if(hasHead==i){
+				sb.append("</thead>");
+			}
+			sb.append("<tbody >");
 		}
-		sb.append("</table>");
+		sb.append("</tbody></table>");
 		return sb;
 	}
 	
