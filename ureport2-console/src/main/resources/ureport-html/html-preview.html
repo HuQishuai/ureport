@@ -14,13 +14,25 @@
 <!--设置表格高度，并呈现y轴滚动条-->
 <style type="text/css">
 	html,body{
-		height: 98%;
+		height: 96%;
 	}
 	#_ureport_table {
 		/**make table can scroll**/
-		height: 88%;
+		height: 86%;
 		overflow-y: auto;
 		overflow-x: hidden;
+	}
+	/*IE表头固定兼容样式*/
+	@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+		/* IE10+ CSS styles go here */
+		tbody {
+			display: block;
+			overflow-y: scroll;
+			overflow-x:hidden;
+		}
+		table thead,tfoot {
+			display: block;
+		}
 	}
 </style>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/jquery.min.js"></script>
@@ -137,11 +149,18 @@ $(document).ready(function(){
 	// 表头固定滚动
 	var ureportTable = document.querySelector('#_ureport_table');
 	function scrollHandle (e){
-		var scrollTop = this.scrollTop;
-		this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
+		// IE表头固定兼容方法
+		if(!!window.ActiveXObject || "ActiveXObject" in window){
+			this.querySelector('tbody').setAttribute("style","max-height:"+(this.clientHeight-this.querySelector('thead').clientHeight)+"px;");
+		}else{
+			var scrollTop = this.scrollTop;
+			this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
+		}
 	}
 	ureportTable.addEventListener('scroll',scrollHandle);
 });
+
+
 </script>
 </body>
 </html>
