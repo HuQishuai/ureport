@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Bstek
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -18,7 +18,6 @@ package com.bstek.ureport.export.html;
 import java.util.List;
 import java.util.Map;
 
-import com.bstek.ureport.definition.Band;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,7 +51,7 @@ public class HtmlProducer{
 		StringBuilder sb = buildTable(report.getContext(),rows, columns, cellMap,false,false);
 		return sb.toString();
 	}
-	
+
 	public String produce(Context context,List<Page> pages,int columnMargin,boolean breakPage){
 		int pageSize=pages.size();
 		int singleTableWidth=buildTableWidth(pages.get(0).getColumns());
@@ -64,9 +63,9 @@ public class HtmlProducer{
 		}
 		StringBuilder sb=new StringBuilder();
 		if(breakPage){
-			sb.append("<table border='0' class='page-break' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");			
+			sb.append("<table border='0' class='page-break' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");
 		}else{
-			sb.append("<table border='0' class='page-break' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");			
+			sb.append("<table border='0' class='page-break' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");
 		}
 		sb.append("<tr>");
 		for(int i=0;i<pageSize;i++){
@@ -83,7 +82,7 @@ public class HtmlProducer{
 		sb.append("</table>");
 		return sb.toString();
 	}
-	
+
 	public String produce(Context context,Page page,boolean breakPage) {
 		List<Row> rows=page.getRows();
 		List<Column> columns=page.getColumns();
@@ -91,7 +90,7 @@ public class HtmlProducer{
 		StringBuilder sb = buildTable(context,rows, columns, cellMap,breakPage,true);
 		return sb.toString();
 	}
-	
+
 	private StringBuilder buildTable(Context context,List<Row> rows, List<Column> columns,Map<Row, Map<Column, Cell>> cellMap,boolean breakPage,boolean forPage) {
 		StringBuilder sb=new StringBuilder();
 		int tableWidth=buildTableWidth(columns);
@@ -101,20 +100,12 @@ public class HtmlProducer{
 			bgStyle=";background:url("+bgImage+") no-repeat";
 		}
 		if(breakPage){
-			sb.append("<table class='page-break' border='0' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");						
+			sb.append("<table class='page-break' border='0' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");
 		}else{
-			sb.append("<table border='0' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");						
+			sb.append("<table border='0' style='margin:auto;border-collapse:collapse;width:"+tableWidth+"pt"+bgStyle+"'>");
 		}
 		int colSize=columns.size();
 		int rowSize=rows.size();
-		// 判断是否有标题或表头
-		int hasHead=-1;
-		for(int i=0;i<rowSize;i++){
-			Row row=rows.get(i);
-			if(null!=row.getBand()&&(row.getBand().equals(Band.title)||row.getBand().equals(Band.headerrepeat))){
-				hasHead=i;
-			}
-		}
 		for(int i=0;i<rowSize;i++){
 			Row row=rows.get(i);
 			if(!forPage && row.isForPaging()){
@@ -123,14 +114,6 @@ public class HtmlProducer{
 			int height=row.getRealHeight();
 			if(height<1){
 				continue;
-			}
-
-			if(hasHead>-1&&i==0){
-				// 添加thead标签，用于表头固定
-				sb.append("<thead >");
-			}else if(hasHead==-1&&i==0){
-				// 没有表头，则不添加thead标签
-				sb.append("<tbody >");
 			}
 			sb.append("<tr style=\"height:"+height+"pt\">");
 			for(int j=0;j<colSize;j++){
@@ -152,15 +135,15 @@ public class HtmlProducer{
 				}
 				if(rowSpan>0){
 					if(colSpan>0){
-						sb.append("<t"+ (hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\" colspan=\""+colSpan+"\"");
+						sb.append("<td rowspan=\""+rowSpan+"\" colspan=\""+colSpan+"\"");
 					}else{
-						sb.append("<t"+ (hasHead>=i? "h":"d")+" rowspan=\""+rowSpan+"\"");
+						sb.append("<td rowspan=\""+rowSpan+"\"");
 					}
 				}else{
 					if(colSpan>0){
-						sb.append("<t"+ (hasHead>=i? "h":"d")+" colspan=\""+colSpan+"\"");
+						sb.append("<td colspan=\""+colSpan+"\"");
 					}else{
-						sb.append("<t"+ (hasHead>=i? "h":"d"));
+						sb.append("<td");
 					}
 				}
 				sb.append(" class='_"+cell.getName()+"' ");
@@ -206,7 +189,7 @@ public class HtmlProducer{
 							linkURL+="?"+urlParameter;
 						}else{
 							linkURL+="&"+urlParameter;
-						}						
+						}
 					}
 					String target=cell.getLinkTargetWindow();
 					if(StringUtils.isBlank(target))target="_self";
@@ -251,22 +234,19 @@ public class HtmlProducer{
 					if(text.equals("")){
 						text="&nbsp;";
 					}
-					sb.append(text);					
+					sb.append(text);
 				}
 				if(hasLink){
 					sb.append("</a>");
 				}
-				sb.append("</t"+ (hasHead>=i? "h":"d")+">");
+				sb.append("</td>");
 			}
 			sb.append("</tr>");
-			if(hasHead==i){
-				sb.append("</thead><tbody >");
-			}
 		}
-		sb.append("</tbody></table>");
+		sb.append("</table>");
 		return sb;
 	}
-	
+
 	private int buildWidth(List<Column> columns,int colIndex,int colSpan){
 		int width=0;
 		int start=colIndex,end=colIndex+colSpan;
@@ -276,7 +256,7 @@ public class HtmlProducer{
 		}
 		return width;
 	}
-	
+
 	private int buildHeight(List<Row> rows,int rowIndex,int rowSpan){
 		int height=0;
 		int start=rowIndex,end=rowIndex+rowSpan;
@@ -286,7 +266,7 @@ public class HtmlProducer{
 		}
 		return height;
 	}
-	
+
 	private String buildCustomStyle(Cell cell){
 		CellStyle style=cell.getCustomCellStyle();
 		CellStyle rowStyle=cell.getRow().getCustomCellStyle();
@@ -359,7 +339,7 @@ public class HtmlProducer{
 			if(bold){
 				sb.append("font-weight:bold;");
 			}else{
-				sb.append("font-weight:normal;");				
+				sb.append("font-weight:normal;");
 			}
 		}
 		Boolean italic=null;
@@ -377,7 +357,7 @@ public class HtmlProducer{
 				sb.append("font-style:italic;");
 			}else{
 				sb.append("font-style:normal;");
-				
+
 			}
 		}
 		Boolean underline=null;
@@ -459,7 +439,7 @@ public class HtmlProducer{
 		}
 		return sb.toString();
 	}
-	
+
 	private int buildTableWidth(List<Column> columns){
 		int width=0;
 		for(Column col:columns){

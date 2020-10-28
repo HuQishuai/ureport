@@ -1,37 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link href="${contextPath}/ureport/res/ureport-asserts/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
-<title>${title}</title>
-<style type="text/css" id="_ureport_table_style">
-	${style}
-</style>
-<!--设置表格高度，并呈现y轴滚动条-->
-<style type="text/css">
-	html,body{
-		height: 92%;
-	}
-	#_ureport_table {
-		/**make table can scroll**/
-		height: 86%;
-		overflow-y: auto;
-		overflow-x: hidden;
-	}
-	table thead,tbody,tfoot {
-		display: block;
-	}
-</style>
- 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/jquery.min.js"></script>
- 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap.min.js"></script>
- 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/Chart.bundle.min.js"></script>
- 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/chartjs-plugin-datalabels.min.js"></script>
- 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap-datetimepicker.js"></script>
- 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/js/preview.bundle.js"></script>
+	<meta charset="UTF-8">
+	<link href="${contextPath}/ureport/res/ureport-asserts/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+	<title>${title}</title>
+	<style type="text/css" id="_ureport_table_style">
+		${style}
+	</style>
+	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/jquery.min.js"></script>
+	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/Chart.bundle.min.js"></script>
+	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/chartjs-plugin-datalabels.min.js"></script>
+	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/js/preview.bundle.js"></script>
 </head>
 <body style="margin:5px">
 ${upSearchFormHtml}
@@ -82,11 +67,11 @@ ${upSearchFormHtml}
 		<div class="btn-group">
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background:#f8f8f8;border:none;color:#337ab7">
 				#if($pageIndex>0)
-					分页预览
+				分页预览
 				#else
-					预览
+				预览
 				#end
-				 <span class="caret"></span>
+				<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu">
 				#if($hasTools)
@@ -101,8 +86,8 @@ ${upSearchFormHtml}
 				#end
 			</ul>
 		</div>
-		#end 
-		#if($pageIndex>0) 
+		#end
+		#if($pageIndex>0)
 		<span id='pagingContainer' style="font-size:14px;margin-left:1px;color:#337ab7">
 			共<span id='totalPageLabel'>${totalPageWithCol}</span>页
 			<select id="pageSelector" class="form-control" style="display:inline-block;width:inherit;font-size:13px;height:28px;margin-top:2px">
@@ -123,33 +108,21 @@ ${downSearchFormHtml}
 <iframe name="_print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <iframe name="_print_pdf_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script type="text/javascript">
-window._server="${contextPath}/ureport";
-window.formElements=[];
-$(document).ready(function(){
-	
-	buildPaging(${pageIndex},${totalPageWithCol});
-	
-	#if($intervalRefreshValue>0)
+	window._server="${contextPath}/ureport";
+	window.formElements=[];
+	$(document).ready(function(){
+
+		buildPaging(${pageIndex},${totalPageWithCol});
+
+		#if($intervalRefreshValue>0)
 		_intervalRefresh($intervalRefreshValue,$totalPageWithCol);
-	#end
-	_buildChartDatas($chartDatas);
-	${searchFormJs}
-	function doSearch(){
-		submitSearchForm("${file}","${customParameters}");
-	}
-	// 表头固定滚动
-	var ureportTable = document.querySelector('#_ureport_table');
-	function scrollHandle (e){
-		var scrollTop = this.scrollTop;
-		this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
-	}
-	// 判断是否存在表头
-	if(this.querySelector('thead')!=null){
-		ureportTable.addEventListener('scroll',scrollHandle);
-	}
-});
-
-
+		#end
+		_buildChartDatas($chartDatas);
+		${searchFormJs}
+		function doSearch(){
+			submitSearchForm("${file}","${customParameters}");
+		}
+	});
 </script>
 </body>
 </html>
